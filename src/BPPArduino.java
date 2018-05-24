@@ -10,28 +10,36 @@ public class BPPArduino extends Arduino {
 
     @Override
     public void receiveCommand(int commandNumber) {
-        if(commandNumber == 1) {
-            sendCommand(5);
+        if (commandNumber == 1) {
+            if (products.size() != 0) {
+                sendCommand(5);
+            } else {
+                this.currentPort.closePort();
+            }
+
         }
     }
 
     @Override
     public void sendCommand(int commandNumber) {
 
-        if(commandNumber == 5) {
+        if (commandNumber == 5) {
             // hier de logica bepalen welke doos het voorwerp inmoet.
-            int boxNumber=0;
-            Product nextProduct =products.get(0);
-            for(Storage box:boxes){
-                for(Product product:box.getProducts()){
-                    if(nextProduct==product){
-                        boxNumber=box.getBoxNumber();
+            int boxNumber = 0;
+            Product nextProduct = products.get(0);
+            for (Storage box : boxes) {
+                for (Product product : box.getProducts()) {
+                    if (nextProduct == product) {
+                        boxNumber = box.getBoxNumber();
                     }
                 }
             }
-            String command="5";
-            command+=boxNumber;
+            String command = "5";
+            command += boxNumber;
             this.writeCurrentPort(command);
+            products.remove(0);
+
+
         }
     }
 
@@ -40,7 +48,7 @@ public class BPPArduino extends Arduino {
     }
 
     public void start() {
-        if(products == null) {
+        if (products == null) {
             popUp.error("Er zijn geen producten geinitialiseerd");
         }
         sendCommand(5);
