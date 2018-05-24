@@ -46,6 +46,7 @@ public class AppBPP {
                 int algoritme = getSelectedOption();
 
                 if (algoritme != 5) {
+                    System.out.println("From appbpp:  " + products);
                     AlgorithmStarter starter = new AlgorithmStarter(products);
                     starter.startAlgorithm(algoritme);
                     boxDisplayPanel1.setBoxes(starter.getBoxes());

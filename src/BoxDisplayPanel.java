@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class BoxDisplayPanel extends JPanel {
     private ArrayList<Storage> boxes = new ArrayList<>();
     private int PANEL_WIDTH = 1400;
-    private int PANEL_HEIGHT =2200;
+    private int PANEL_HEIGHT = 10000;
     private Graphics graphics;
     private boolean isPainted = false;
 
