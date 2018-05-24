@@ -38,7 +38,7 @@ public class XmlImporter extends JFrame implements ActionListener {
     //    private ProductListPanel productListPanel;
     private JList productList;
     private Customer customer = new Customer();
-    private String orderDate;
+    private static String orderDate;
     private static String orderNumber;
 
     public XmlImporter() {
@@ -139,6 +139,7 @@ public class XmlImporter extends JFrame implements ActionListener {
                         ArrayList<String> TemporaryList = new ArrayList<>();
                         for (int i = 0; i < artikelen.getLength(); i++) {
                             TemporaryList.add(artikelen.item(i).getTextContent());
+                            System.out.println("Templist"+TemporaryList);
                         }
                         addProductToList(TemporaryList);
                     } else {
@@ -180,6 +181,7 @@ public class XmlImporter extends JFrame implements ActionListener {
 
                                     database.addOrderList(artikelen.item(i).getTextContent(), bestellingElement.getElementsByTagName("ordernummer").item(0).getTextContent());
                                     TemporaryList.add(artikelen.item(i).getTextContent());
+                                    System.out.println("Templist"+TemporaryList);
                                 }
                                 addProductToList(TemporaryList);
                             } else {
@@ -194,6 +196,8 @@ public class XmlImporter extends JFrame implements ActionListener {
 
                                     database.addOrderList(artikelen.item(i).getTextContent(), bestellingElement.getElementsByTagName("ordernummer").item(0).getTextContent());
                                     TemporaryList.add(artikelen.item(i).getTextContent());
+                                    System.out.println("Templist"+TemporaryList);
+
                                 }
                                 addProductToList(TemporaryList);
 
@@ -226,6 +230,7 @@ public class XmlImporter extends JFrame implements ActionListener {
 
     public void addProductToList(ArrayList<String> TemporaryList) {
         Database database = new Database();
+        System.out.println("Testing"+products);
 
         products = database.getProductData(TemporaryList);
 
@@ -244,7 +249,7 @@ public class XmlImporter extends JFrame implements ActionListener {
     }
 
 
-    public String getOrderDate() {
+    public static String getOrderDate() {
         return orderDate;
     }
 

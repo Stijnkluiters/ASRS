@@ -14,6 +14,9 @@ public class WorstFit extends Algorithm {
     protected void startCalculation() {
         for (int i = 0; i < products.size(); i++) {
             calculate(products.get(i));
+            if(i==products.size()-1){
+                calculationAndPdf(products.get(i));
+            }
         }
     }
     private Storage sortDesending(ArrayList<Storage> markedBoxes) {
@@ -42,5 +45,12 @@ public class WorstFit extends Algorithm {
             Storage box = createNewBox();
             box.addProduct(product);
         }
+
+    }
+    public void calculationAndPdf(Product product){
+        calculate(product);
+        PdfCreator pdfCreator = new PdfCreator();
+        pdfCreator.setBoxes(boxes);
+        pdfCreator.CreatePdf();
     }
 }

@@ -13,6 +13,9 @@ public class FirstFit extends Algorithm {
     public void startCalculation(){
         for(int i = 0; i < products.size(); i++) {
             calculate(products.get(i));
+            if(i==products.size()-1){
+                calculationAndPdf(products.get(i));
+            }
         }
     }
 
@@ -32,7 +35,13 @@ public class FirstFit extends Algorithm {
             box.addProduct(product);
         }
 
+    }
 
+    public void calculationAndPdf(Product product){
+        calculate(product);
+        PdfCreator pdfCreator = new PdfCreator();
+        pdfCreator.setBoxes(boxes);
+        pdfCreator.CreatePdf();
     }
 
 
