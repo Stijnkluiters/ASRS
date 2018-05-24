@@ -1,7 +1,6 @@
 
 import com.fazecast.jSerialComm.*;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.util.ArrayList;
 
