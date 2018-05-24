@@ -67,24 +67,7 @@ public class Dashboard {
 
 
         System.out.println("XML IMPORTER: " + xmlImporter.getProducts());
-        AppTSP appTSP = new AppTSP();
-        appTSP.setProducts(products);
-        if (comboBoxTSP.getSelectedItem().toString().length() != 4) {
-            popUp.error("Er is geen communicatie poort beschikbaar");
-            return;
-        }
-        // setup the arduino TSP.
-        TSPArduino = new TSPArduino(comboBoxTSP.getSelectedItem().toString());
-        appTSP.setArduino(TSPArduino);
-        TSPArduino.setBppArduino(new BPPArduino(comboBoxBPP.getSelectedItem().toString()));
-        appTSP.start();
 
-
-        if (appTSP.isRouteCalculated()) {
-//                            BPPArduino = new BPPArduino(comboBoxBPP.getSelectedItem().toString());
-//                            BPPArduino.setProducts(appTSP.getOrder());
-//                            popUp.notify("Route is calculated");
-        }
     }
 
     private void addProductsToDashboard() {
@@ -132,7 +115,24 @@ public class Dashboard {
 
                         // this is being used so it will be more easy to read.
                         handleUploadedXml();
+                        AppTSP appTSP = new AppTSP();
+                        appTSP.setProducts(products);
+                        if (comboBoxTSP.getSelectedItem().toString().length() != 4) {
+                            popUp.error("Er is geen communicatie poort beschikbaar");
+                            return;
+                        }
+                        // setup the arduino TSP.
+                        TSPArduino = new TSPArduino(comboBoxTSP.getSelectedItem().toString());
+                        appTSP.setArduino(TSPArduino);
+                        TSPArduino.setBppArduino(new BPPArduino(comboBoxBPP.getSelectedItem().toString()));
+                        appTSP.start();
 
+
+                        if (appTSP.isRouteCalculated()) {
+//                            BPPArduino = new BPPArduino(comboBoxBPP.getSelectedItem().toString());
+//                            BPPArduino.setProducts(appTSP.getOrder());
+//                            popUp.notify("Route is calculated");
+                        }
 
                     } else {
                         popUp.error("Er is nog geen xml geupload");
@@ -145,6 +145,7 @@ public class Dashboard {
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == bppButton) {
                     if (xmlImporter.isUploaded()) {
+                        handleUploadedXml();
                         AppBPP bpp = new AppBPP();
                         bpp.setProducts(products);
                         bpp.start();
