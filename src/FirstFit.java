@@ -11,7 +11,7 @@ public class FirstFit extends Algorithm {
     }
 
     public void startCalculation(){
-        for(int i = 0; i < products.size(); i++) {
+        for(int i = 0; i < products.size()-1; i++) {
             calculate(products.get(i));
             if(i==products.size()-1){
                 calculationAndPdf(products.get(i));
