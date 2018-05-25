@@ -52,7 +52,7 @@ public class TSP implements Service, ThreadListener {
                 getRoute().getRunningTime()
         );
         this.timeValue.setText(timeLabel);
-        arduino.setProducts(getRoute().getSubroute());
+        arduino.setRoute(getRoute());
 
         t.interrupt();
     }

@@ -18,6 +18,8 @@ abstract public class Arduino implements ArduinoInterface {
 
     protected ArrayList<Product> products;
 
+    protected Route route;
+
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
     }
@@ -110,5 +112,10 @@ abstract public class Arduino implements ArduinoInterface {
                 currentPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 3000, 3000);
             }
         }
+    }
+
+    public void setRoute(Route route) {
+        this.setProducts(route.getSubroute());
+        this.route = route;
     }
 }

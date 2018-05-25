@@ -9,6 +9,7 @@ public class TSPArduino extends Arduino {
     private int tempIndex;
     private boolean isFinished = false;
     private BPPArduino bppArduino;
+    private boolean isAtStart;
 
     // opening the port depending on String
     public TSPArduino(String portName) {
@@ -54,32 +55,37 @@ public class TSPArduino extends Arduino {
                 case 1:
                     tempIndex++;
                     // gather the next product out of the temporary arraylist
-
+                    System.out.println("Current index: " + tempIndex);
                     // als alle producten zijn opgehaald moet de robot terug naar de start positie
                     if (tempArray.size() == 0) {
-                        if (closeCurrentPort()) {
-                            popUp.notify("Alle producten zijn opgehaald vanaf TSP");
-                            if (isFinished) {
+                        System.out.println("Products are empty 60");
+
+                            if (!isFinished && isAtStart) {
+
+                                System.out.println("trying to send 0");
                                 sendCommand(0);
+//                                currentPort.closePort();
+                                isFinished = true;
+                                System.out.println("TSP IS DONE!");
+
                             } else {
+                                System.out.println("trying to send 3");
                                 sendCommand(3);
+                                isAtStart = true;
                             }
-                            isFinished = true;
-                        } else {
-                            popUp.error("Het sluiten van de poort is mislukt");
-                        }
                     } else if (tempIndex % 3 == 0) {
-                        sendCommand(3);
+//                        sendCommand(3);
+                        System.out.println("Normaly started BPP NOW");
+                        this.writeCurrentPort("3");
                     } else {
                         try {
-                            this.nextProduct = tempArray.get(0);
-                            System.out.println("-------------------------");
-                            System.out.println("Removing: " + nextProduct.name);
-                            tempArray.remove(0);
+                            System.out.println("Trying to send 2");
+                            sendCommand(2);
+                            this.route.removeProduct();
                         } catch (IndexOutOfBoundsException e) {
                             popUp.notify("Alle producten zijn opgehaald");
+                            System.out.println("alle producten zijn opgehaald");
                         }
-                        sendCommand(2);
                     }
                     break;
             }
@@ -122,6 +128,9 @@ public class TSPArduino extends Arduino {
                     coordinets += nextProduct.getX();
                     coordinets += nextProduct.getY();
                     this.writeCurrentPort(coordinets);
+                    System.out.println("-------------------------");
+                    System.out.println("Removing: " + nextProduct.name);
+                    tempArray.remove(0);
                     break;
                 case 3:
                     this.writeCurrentPort("3");
@@ -136,7 +145,7 @@ public class TSPArduino extends Arduino {
             }
         } catch (NullPointerException e) {
             System.out.println("producten zijn op.. regel 82");
-            System.out.println(e.getLocalizedMessage());
+            System.out.println(e.getMessage());
         }
     }
 

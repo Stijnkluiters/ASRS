@@ -61,11 +61,8 @@ public class Route {
         return this.subroute;
     }
 
-    public Product getTarget() {
-        return this.target;
-    }
 
-    public float getRouteDistance(ArrayList<Product> p) {
+    private float getRouteDistance(ArrayList<Product> p) {
         // DISTANCE
         float totalDistance = 0;
         for (int i = 0; i < p.size() - 1; i++) {
@@ -96,4 +93,8 @@ public class Route {
         return this.runningTime;
     }
 
+    public void removeProduct() {
+        this.getSubroute().remove(0);
+        this.drawpanel.update();
+    }
 }

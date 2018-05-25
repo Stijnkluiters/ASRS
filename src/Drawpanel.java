@@ -21,7 +21,6 @@ public class Drawpanel extends JPanel {
     private int incrementx;
     private int incrementy;
 
-    private Product target;
     private BufferedImage image;
 
     private Route route;
@@ -33,9 +32,8 @@ public class Drawpanel extends JPanel {
     public void update() {
 
 
-        this.target = this.route.getTarget();
         this.subRoute = this.route.getSubroute();
-
+//
         this.createImage();
         this.render();
         try {
@@ -147,6 +145,24 @@ public class Drawpanel extends JPanel {
         this.imageGraphics.setColor(p.getColor());
         this.imageGraphics.fillOval(coordinates[0] - 4, coordinates[1] - 4, 15, 15);
     }
+
+    /**
+     * Setting up a function to set the status to complete
+     * @param p Product
+     */
+    public void drawCompleteForProduct(Product p) {
+
+        int[] coordinates = this.getLoc(this.incrementx, this.incrementy, p.getX(), p.getY());
+        drawList.remove(this.getLoc(this.incrementx, this.incrementy, p.getX(), p.getY()));
+        this.imageGraphics.fillRect(coordinates[0] - 4, coordinates[1] - 4, width, height);
+
+        this.imageGraphics.setColor(null);
+        this.imageGraphics.fillOval(coordinates[0] - 4, coordinates[1] - 4, 15, 15);
+        this.imageGraphics.setColor(Color.green);
+        this.imageGraphics.fillOval(coordinates[0] - 4, coordinates[1] - 4, 15, 15);
+        this.update();
+    }
+
 
     /**
      * create an image with the given height and width. in the image we create a grid 5x5.

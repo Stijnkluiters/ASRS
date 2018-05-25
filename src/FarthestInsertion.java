@@ -65,7 +65,6 @@ public class FarthestInsertion implements AlgorithmTSPInterface {
             // Remove from the control list
             controlList.remove(farthestFromSubroute);
         }
-        System.out.println(this.subroute.toString());
         this.model.updateRoute(name, this.subroute, null);
         return this.subroute;
     }

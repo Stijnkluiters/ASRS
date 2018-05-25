@@ -27,6 +27,7 @@ public class Dashboard {
     private BPPArduino BPPArduino;
     private ArrayList<Product> products;
     private XmlImporter xmlImporter;
+    private AppTSP appTSP;
 
     public void initComboboxes() {
 
@@ -115,7 +116,7 @@ public class Dashboard {
 
                         // this is being used so it will be more easy to read.
                         handleUploadedXml();
-                        AppTSP appTSP = new AppTSP();
+                        appTSP = new AppTSP();
                         appTSP.setProducts(products);
                         if (comboBoxTSP.getSelectedItem().toString().length() != 4) {
                             popUp.error("Er is geen communicatie poort beschikbaar");
