@@ -57,6 +57,10 @@ public class Route {
         drawpanel.update();
     }
 
+    public Drawpanel getDrawpanel() {
+        return drawpanel;
+    }
+
     public ArrayList<Product> getSubroute() {
         return this.subroute;
     }

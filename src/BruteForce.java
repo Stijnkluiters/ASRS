@@ -33,6 +33,7 @@ class BruteForce implements AlgorithmTSPInterface<ArrayList<Product>> {
                 this.optimalRoute = r;
                 this.startPoint = this.optimalRoute.get(0);
                 this.route.updateRoute(name, r, null);
+                this.route.getDrawpanel().update();
             }
         }
 
@@ -84,8 +85,6 @@ class BruteForce implements AlgorithmTSPInterface<ArrayList<Product>> {
     public <T> ArrayList<T> execute(ArrayList<T> products) {
         ArrayList<Product> route = new ArrayList<Product>();
         this.bruteForceFindBestRoute(route, (ArrayList<Product>) products);
-
-
 
         return (ArrayList<T>) this.optimalRoute;
     }

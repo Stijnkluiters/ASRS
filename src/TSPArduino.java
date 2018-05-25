@@ -53,6 +53,10 @@ public class TSPArduino extends Arduino {
                  * voor de volgende coördinaten
                  */
                 case 1:
+                    if(isFinished) {
+                        popUp.notify("Alle producten zijn opgehaald");
+                        return;
+                    }
                     tempIndex++;
                     // gather the next product out of the temporary arraylist
                     System.out.println("Current index: " + tempIndex);
@@ -66,17 +70,15 @@ public class TSPArduino extends Arduino {
                                 sendCommand(0);
 //                                currentPort.closePort();
                                 isFinished = true;
-                                System.out.println("TSP IS DONE!");
-
                             } else {
                                 System.out.println("trying to send 3");
                                 sendCommand(3);
                                 isAtStart = true;
                             }
                     } else if (tempIndex % 3 == 0) {
-//                        sendCommand(3);
+                        sendCommand(3);
                         System.out.println("Normaly started BPP NOW");
-                        this.writeCurrentPort("3");
+//                        this.writeCurrentPort("3");
                     } else {
                         try {
                             System.out.println("Trying to send 2");
@@ -115,6 +117,7 @@ public class TSPArduino extends Arduino {
                 case 0:
                     // send this command to send the robot back to the starting position
                     this.writeCurrentPort("0");
+//                    popUp.notify("Alle producten opgehaald TSP is klaar");
                     break;
                 case 2:
                     // geeft coordinaten door van het volgende product.
@@ -134,11 +137,11 @@ public class TSPArduino extends Arduino {
                     break;
                 case 3:
                     this.writeCurrentPort("3");
-
+                    popUp.notify("Terug naar de start positie om te lossen");
                     // init the BPPArduino. from here the BPP arduino must be activated and
                     // communication needs to be started.
-                    bppArduino.setProducts(products);
-                    bppArduino.start();
+//                    bppArduino.setProducts(products);
+//                    bppArduino.start();
 
                     // return to start point.
                     break;

@@ -140,6 +140,7 @@ public class AppTSP {
             @Override
             public void actionPerformed(ActionEvent e) {
                 arduino.start();
+                popUp.notify("Het ophalen van de producten via het TSP algoritme is begonnen");
             }
         });
     }
