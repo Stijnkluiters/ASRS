@@ -11,13 +11,14 @@ public abstract class Algorithm {
     public Algorithm() {
 
         boxes = new ArrayList<Storage>();
-        boxes.add(new Storage());
+        boxes.add(new Storage(Storage.boxCounter));
     }
     protected abstract void startCalculation();
 
 
     public Storage createNewBox(){
-        Storage box = new Storage();
+        Storage box = new Storage(Storage.boxCounter);
+        Storage.boxCounter++;
         boxes.add(box);
         return box;
     }

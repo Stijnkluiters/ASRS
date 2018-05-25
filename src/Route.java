@@ -51,7 +51,7 @@ public class Route {
         }
 
         this.routesWithDistance.put(this.subroute, totalDistance);
-//        System.out.println("Total time for "+ from + " in Milli seconds: " + runningTime);
+        System.out.println("Total time for "+ from + " in Milli seconds: " + runningTime);
 
 
         drawpanel.update();

@@ -2,11 +2,14 @@ import java.util.ArrayList;
 
 public class Storage {
     private ArrayList<Product> box;
-
+    private int boxNumber;
+    public static int boxCounter= 1;
     private int MAXBOXSIZE = 100;
 
-    public Storage(){
+    public Storage(int boxcounter){
+
         box = new ArrayList<Product>();
+        boxNumber=boxcounter;
     }
 
 
@@ -51,5 +54,8 @@ public class Storage {
         return toString + ": " +  getCurrentCapacity();
     }
 
+    public int getBoxNumber() {
+        return boxNumber;
+    }
 }
 
