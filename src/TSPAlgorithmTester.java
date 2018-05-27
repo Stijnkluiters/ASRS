@@ -65,7 +65,7 @@ public class TSPAlgorithmTester {
             this.bruteForce.execute(products);
             bruteForceRunningTime = this.route.getRunningTime();
         }
-        // FarestInsertion
+        // Farthest Insertion
 
         long faresstInsertionRunningTime = 0;
         if(countProducts < 400) {
@@ -99,19 +99,19 @@ public class TSPAlgorithmTester {
         return new Route(new Drawpanel());
     }
 
-    private void addrow(int countProducts, long bruteforce, long farestInsertion, long nearest, long random) {
+    private void addrow(int countProducts, long bruteforce, long farthestInsertion, long nearest, long random) {
 
 
         String countProductsS = Integer.toString(countProducts);
         String bruteForceS = Long.toString(bruteforce);
-        String farestInsertionS = Long.toString(farestInsertion);
+        String farthestInsertionS = Long.toString(farthestInsertion);
         String nearestS = Long.toString(nearest);
         String randomS = Long.toString(random);
 
 
         this.table.addCell(countProductsS);
         this.table.addCell(bruteForceS);
-        this.table.addCell(farestInsertionS);
+        this.table.addCell(farthestInsertionS);
         this.table.addCell(nearestS);
         this.table.addCell(randomS);
 
@@ -150,7 +150,7 @@ public class TSPAlgorithmTester {
             table = new PdfPTable(5);
             table.addCell("Amount of products:");
             table.addCell("Bruteforce:");
-            table.addCell("Farest:");
+            table.addCell("farthest:");
             table.addCell("Nearest:");
             table.addCell("Random:");
 
