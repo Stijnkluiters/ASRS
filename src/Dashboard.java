@@ -47,8 +47,9 @@ public class Dashboard {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
-
+        // testing database connections
+        Database database = new Database();
+        dashboard = null;
     }
 
     private void handleUploadedXml() {
