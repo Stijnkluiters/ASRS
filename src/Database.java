@@ -8,13 +8,20 @@ public class Database {
     private ResultSet rs;
 
     public Database(){
+        initConnection();
+    }
+
+    public void initConnection() {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
+            if(con == null) {
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/kbs?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+                st = con.createStatement();
+            }
 
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/kbs?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","root");
-            st = con.createStatement();
         }catch(SQLException ex){
-            System.out.println("SQL ERROR: " + ex.getMessage());
+            popUp.error("There went something wrong when setting up the database connection: " + ex.getMessage() + " fix the issue and restart the program.");
+
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
@@ -90,6 +97,7 @@ public class Database {
 
         } catch(SQLException ex){
             System.out.println(ex.getErrorCode() + " " + ex.getMessage());
+            System.out.println("Not in database");
 
         }
         System.out.println("Not in database");

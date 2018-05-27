@@ -46,29 +46,31 @@ public class XmlImporter extends JFrame implements ActionListener {
     }
 
     public void handleMouseClick(MouseEvent e) {
-
-        tf = new JTextField();
-        tf.setBounds(20, 50, 190, 30);
-        add(tf);
-
-        b = new JButton("Browse");
-        b.setBounds(250, 50, 80, 30);
-        add(b);
-        b.addActionListener(this);
-        b1 = new JButton("Upload");
-        b1.setBounds(250, 100, 80, 30);
-        add(b1);
-        b1.addActionListener(this);
-        fc = new JFileChooser();
-        setLayout(null);
-        setSize(400, 300);
-        setVisible(true);
-        try {
-            s = new Socket("localhost", 10);
-            dout = new DataOutputStream(s.getOutputStream());
-            din = new DataInputStream(s.getInputStream());
-        } catch (Exception ex) {
+        if (tf == null) {
+            tf = new JTextField();
+            tf.setBounds(20, 50, 190, 30);
+            add(tf);
         }
+        if (b == null) {
+            b = new JButton("Browse");
+            b.setBounds(250, 50, 80, 30);
+            add(b);
+            b.addActionListener(this);
+        }
+        if (b1 == null) {
+            b1 = new JButton("Upload");
+            b1.setBounds(250, 100, 80, 30);
+            add(b1);
+            b1.addActionListener(this);
+            b1.setEnabled(false);
+        }
+        if (fc == null) {
+            fc = new JFileChooser();
+            setLayout(null);
+            setSize(400, 300);
+            setVisible(true);
+        }
+//        this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }
 
     public void setLabels(String name) {
@@ -83,8 +85,16 @@ public class XmlImporter extends JFrame implements ActionListener {
                 int x = fc.showOpenDialog(null);
                 if (x == JFileChooser.APPROVE_OPTION) {
                     fileToBeSent = fc.getSelectedFile();
-                    setLabels(fileToBeSent.getName());
-                    b1.setEnabled(true);
+
+                    if (this.getFileExtension(fileToBeSent).equalsIgnoreCase("xml")) {
+                        b1.setEnabled(true);
+                        setLabels(fileToBeSent.getName());
+                        b1.setEnabled(true);
+                    } else {
+                        popUp.error("het bestandstype moet verplicht .xml zijn is nu:" + this.getFileExtension(fileToBeSent));
+                        fileToBeSent = null;
+                        b1.setEnabled(false);
+                    }
                 } else {
                     fileToBeSent = null;
                     tf.setText(null);
@@ -92,12 +102,15 @@ public class XmlImporter extends JFrame implements ActionListener {
                 }
             }
             if (e.getSource() == b1) {
-                this.parseToXml();
-                JComponent comp = (JComponent) e.getSource();
-                Window win = SwingUtilities.getWindowAncestor(comp);
-                win.dispose();
+                if (this.getFileExtension(fileToBeSent).equalsIgnoreCase("xml")) {
+
+                    this.parseToXml();
+                    JComponent comp = (JComponent) e.getSource();
+                    Window win = SwingUtilities.getWindowAncestor(comp);
+                    win.dispose();
 //                productListPanel.setProducts(products);
 //                productListPanel.setProductList(productList);
+                }
             }
         } catch (Exception ex) {
         }
@@ -126,7 +139,14 @@ public class XmlImporter extends JFrame implements ActionListener {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element bestellingElement = (Element) nNode;
-                    orderNumber = bestellingElement.getElementsByTagName("ordernummer").item(0).getTextContent();
+                    NodeList orderNumberTemp = bestellingElement.getElementsByTagName("ordernummer");
+                    if (orderNumberTemp.getLength() == 0) {
+                        popUp.error("Er is geen ordernummer gevonden in het xml bestand");
+                        return;
+                    } else {
+                        orderNumber = orderNumberTemp.item(0).getTextContent();
+                    }
+
                     System.out.println("ordernummer: " + orderNumber);
                     if (database.checkOrderInDatabase(bestellingElement.getElementsByTagName("ordernummer").item(0).getTextContent())) {
                         //if order is in the database just get the products
@@ -139,7 +159,7 @@ public class XmlImporter extends JFrame implements ActionListener {
                         ArrayList<String> TemporaryList = new ArrayList<>();
                         for (int i = 0; i < artikelen.getLength(); i++) {
                             TemporaryList.add(artikelen.item(i).getTextContent());
-                            System.out.println("Templist"+TemporaryList);
+                            System.out.println("Templist" + TemporaryList);
                         }
                         addProductToList(TemporaryList);
                     } else {
@@ -147,15 +167,66 @@ public class XmlImporter extends JFrame implements ActionListener {
                         /*
                          * nog een laag dieper naar het klanten object in XML
                          */
-                        NodeList klant = doc.getElementsByTagName("klant");
                         Element klantElement = (Element) nNode;
+
+
                         if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                            String name = klantElement.getElementsByTagName("voornaam").item(0).getTextContent();
-                            String lastname = klantElement.getElementsByTagName("achternaam").item(0).getTextContent();
-                            String adress = klantElement.getElementsByTagName("adres").item(0).getTextContent();
-                            String zipcode = klantElement.getElementsByTagName("postcode").item(0).getTextContent();
-                            String city = klantElement.getElementsByTagName("plaats").item(0).getTextContent();
-                            String datum = bestellingElement.getElementsByTagName("datum").item(0).getTextContent();
+                            String name = "";
+                            NodeList tempName = klantElement.getElementsByTagName("voornaam");
+                            if (tempName.getLength() == 0) {
+                                popUp.error("het veld: Voornaam is verplicht in het xml bestand");
+                                return;
+                            } else {
+                                name = tempName.item(0).getTextContent();
+                            }
+                            String lastname = "";
+                            NodeList lastNameTemp = klantElement.getElementsByTagName("achternaam");
+                            if (lastNameTemp.getLength() == 0) {
+                                popUp.error("het veld: achternaam is verplicht in het xml bestand");
+                                return;
+                            } else {
+                                lastname = lastNameTemp.item(0).getTextContent();
+                            }
+
+
+                            String adress = "";
+                            NodeList adressTemp = klantElement.getElementsByTagName("adres");
+                            if (adressTemp.getLength() == 0) {
+                                popUp.error("het veld: Adres is verplicht in het xml bestand");
+                                return;
+                            } else {
+                                adress = adressTemp.item(0).getTextContent();
+                            }
+
+
+                            NodeList zipcodeTemp = klantElement.getElementsByTagName("postcode");
+                            String zipcode = "";
+                            if (zipcodeTemp.getLength() == 0) {
+                                popUp.error("het veld: zipcode is verplicht in het xml bestand");
+                                return;
+                            } else {
+                                zipcode = zipcodeTemp.item(0).getTextContent();
+                            }
+
+                            NodeList cityTemp = klantElement.getElementsByTagName("plaats");
+                            String city = "";
+                            if (cityTemp.getLength() == 0) {
+                                popUp.error("het veld: city is verplicht in het xml bestand");
+                                return;
+                            } else {
+                                city = cityTemp.item(0).getTextContent();
+                            }
+
+
+                            NodeList datumTemp = bestellingElement.getElementsByTagName("datum");
+                            String datum = "";
+                            if (datumTemp.getLength() == 0) {
+                                popUp.error("het veld: datum is verplicht in het xml bestand");
+                                return;
+                            } else {
+                                datum = datumTemp.item(0).getTextContent();
+                            }
+
 
                             this.customer.setFirstName(name);
                             this.customer.setLastName(lastname);
@@ -181,7 +252,7 @@ public class XmlImporter extends JFrame implements ActionListener {
 
                                     database.addOrderList(artikelen.item(i).getTextContent(), bestellingElement.getElementsByTagName("ordernummer").item(0).getTextContent());
                                     TemporaryList.add(artikelen.item(i).getTextContent());
-                                    System.out.println("Templist"+TemporaryList);
+                                    System.out.println("Templist" + TemporaryList);
                                 }
                                 addProductToList(TemporaryList);
                             } else {
@@ -196,7 +267,7 @@ public class XmlImporter extends JFrame implements ActionListener {
 
                                     database.addOrderList(artikelen.item(i).getTextContent(), bestellingElement.getElementsByTagName("ordernummer").item(0).getTextContent());
                                     TemporaryList.add(artikelen.item(i).getTextContent());
-                                    System.out.println("Templist"+TemporaryList);
+                                    System.out.println("Templist" + TemporaryList);
 
                                 }
                                 addProductToList(TemporaryList);
@@ -207,15 +278,7 @@ public class XmlImporter extends JFrame implements ActionListener {
                     }
 
 
-                    System.out.println("Datum : " + bestellingElement.getElementsByTagName("datum").item(0).getTextContent());
-
-//                    NodeList artikelen = bestellingElement.getElementsByTagName("artikelnr");
-//                    ArrayList<String> TemporaryList = new ArrayList<>();
-//                    for (int i = 0; i < artikelen.getLength(); i++) {
-//                       TemporaryList.add(artikelen.item(i).getTextContent());
-//                    }
-//                    addProductToList(TemporaryList);
-
+                    System.out.println("Datum : " + orderDate);
                 }
             }
         } catch (Exception e) {
@@ -230,10 +293,17 @@ public class XmlImporter extends JFrame implements ActionListener {
 
     public void addProductToList(ArrayList<String> TemporaryList) {
         Database database = new Database();
-        System.out.println("Testing"+products);
+        System.out.println("Testing" + products);
 
         products = database.getProductData(TemporaryList);
 
+    }
+
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
+        else return "";
     }
 
     public Customer getCustomer() {

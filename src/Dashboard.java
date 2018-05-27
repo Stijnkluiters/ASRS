@@ -113,28 +113,21 @@ public class Dashboard {
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == tspButton) {
                     if (xmlImporter.isUploaded()) {
-
+                        String commPort = comboBoxTSP.getSelectedItem().toString();
+                        if (commPort.length() != 4) {
+                            popUp.error("Er is geen communicatie poort beschikbaar");
+                            return;
+                        }
                         // this is being used so it will be more easy to read.
                         handleUploadedXml();
                         appTSP = new AppTSP();
                         appTSP.setProducts(products);
-                        if (comboBoxTSP.getSelectedItem().toString().length() != 4) {
-                            popUp.error("Er is geen communicatie poort beschikbaar");
-                            return;
-                        }
+
                         // setup the arduino TSP.
-                        TSPArduino = new TSPArduino(comboBoxTSP.getSelectedItem().toString());
+                        TSPArduino = new TSPArduino(commPort);
                         appTSP.setArduino(TSPArduino);
                         TSPArduino.setBppArduino(new BPPArduino(comboBoxBPP.getSelectedItem().toString()));
                         appTSP.start();
-
-
-                        if (appTSP.isRouteCalculated()) {
-//                            BPPArduino = new BPPArduino(comboBoxBPP.getSelectedItem().toString());
-//                            BPPArduino.setProducts(appTSP.getOrder());
-//                            popUp.notify("Route is calculated");
-                        }
-
                     } else {
                         popUp.error("Er is nog geen xml geupload");
                     }

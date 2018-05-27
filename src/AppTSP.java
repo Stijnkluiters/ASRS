@@ -47,10 +47,12 @@ public class AppTSP {
         frame.pack();
         frame.setVisible(true);
 
-    }
+        if (products.size() > 10) {
+            this.bruteForceRadioButton.setEnabled(false);
+        } else {
+            this.bruteForceRadioButton.setEnabled(true);
+        }
 
-    public ArrayList<Product> getOrderedProducts() {
-        return orderedProducts;
     }
 
     public void setProducts(ArrayList<Product> products) {
@@ -60,6 +62,8 @@ public class AppTSP {
     public AppTSP() {
         createUIComponents();
         $$$setupUI$$$();
+
+
         /**
          * Start tsp algorithm.
          */
