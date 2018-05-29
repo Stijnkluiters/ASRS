@@ -26,7 +26,8 @@ public class BPPArduino extends Arduino {
         if (commandNumber == 5) {
             // hier de logica bepalen welke doos het voorwerp inmoet.
             int boxNumber = 0;
-            Product nextProduct = products.get(0);
+            Product nextProduct = this.products.get(0);
+            System.out.println(products);
             for (Storage box : boxes) {
                 for (Product product : box.getProducts()) {
                     if (nextProduct == product) {
@@ -34,10 +35,10 @@ public class BPPArduino extends Arduino {
                     }
                 }
             }
+            this.products.remove(0);
             String command = "5";
             command += boxNumber;
             this.writeCurrentPort(command);
-            products.remove(0);
 
 
         }
@@ -48,9 +49,21 @@ public class BPPArduino extends Arduino {
     }
 
     public void start() {
-        if (products == null) {
+
+
+
+
+
+        if (this.boxes == null) {
             popUp.error("Er zijn geen producten geinitialiseerd");
         }
+        ArrayList<Product> tempProducts = new ArrayList<>();
+        for (Storage box : boxes) {
+            for (Product product : box.getProducts()) {
+                tempProducts.add(product);
+            }
+        }
+        this.setProducts(tempProducts);
         sendCommand(5);
 
     }
